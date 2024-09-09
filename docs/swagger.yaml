@@ -1,0 +1,48 @@
+definitions:
+  main.Match:
+    properties:
+      matchID:
+        type: string
+      name:
+        type: string
+      round:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/matches:
+    get:
+      description: Get matches filtered by their status (live, completed or scheduled)
+        and sorted by round
+      parameters:
+      - description: Match Status
+        in: query
+        name: status
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Match'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Retrieve matches by status
+      tags:
+      - matches
+swagger: "2.0"
