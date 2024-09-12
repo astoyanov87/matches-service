@@ -21,7 +21,6 @@ paths:
       - description: Match Status
         in: query
         name: status
-        required: true
         type: string
       responses:
         "200":

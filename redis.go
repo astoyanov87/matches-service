@@ -44,7 +44,7 @@ func getMatchesByStatus(ctx context.Context, rdb *redis.Client, status string) (
 	var foundMatches []Match
 
 	setKey := status + "_matches"
-	fmt.Println(setKey)
+	fmt.Println("Requested: " + setKey)
 	matchesIDs, err := rdb.SMembers(ctx, setKey).Result()
 	if err != nil {
 		return nil, err
@@ -65,6 +65,43 @@ func getMatchesByStatus(ctx context.Context, rdb *redis.Client, status string) (
 	}
 	sort.Sort(SortedByRound(foundMatches))
 	return foundMatches, err
+}
+
+// Get All matches from Redis
+func getAllMatches(ctx context.Context, rdb *redis.Client) ([]Match, error) {
+
+	var cursor uint64
+	var keys []string
+	var err error
+	var foundMatches []Match
+
+	matchPrefix := "match:*"
+	keys, cursor, err = rdb.Scan(ctx, cursor, matchPrefix, 300).Result()
+
+	if err != nil {
+		fmt.Printf("Can not find keys that start with %v", matchPrefix)
+		return foundMatches, nil
+	}
+
+	for _, matchKey := range keys {
+
+		matchData, err := rdb.HGet(context.Background(), matchKey, "data").Result()
+		if err != nil {
+			fmt.Println("Error retrieving match from cache")
+			return foundMatches, nil
+		}
+		var matchObj Match
+		err = json.Unmarshal([]byte(matchData), &matchObj)
+
+		if err != nil {
+			fmt.Println("Error unmarshaling data from Redis")
+		}
+		//fmt.Println(matchObj)
+		foundMatches = append(foundMatches, matchObj)
+	}
+	sort.Sort(SortedByRound(foundMatches))
+
+	return foundMatches, nil
 }
 
 // Len is the number of elements in the collection.

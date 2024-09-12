@@ -27,8 +27,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Match Status",
                         "name": "status",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
