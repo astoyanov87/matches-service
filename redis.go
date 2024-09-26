@@ -6,15 +6,18 @@ import (
 	"fmt"
 	"log"
 	"sort"
+	"strings"
 
 	"github.com/go-redis/redis/v8"
 )
 
 type Match struct {
-	MatchId string `json:"matchID"`
-	Name    string `json:"name"`
-	Status  string `json:"status"`
-	Round   string `json:"round"`
+	MatchId         string `json:"matchID"`
+	Name            string `json:"name"`
+	Status          string `json:"status"`
+	Round           string `json:"round"`
+	HomePlayerScore int    `json:"homePlayerScore"`
+	AwayPlayerScore int    `json:"awayPlayerScore"`
 }
 
 type SortedByRound []Match
@@ -60,8 +63,11 @@ func getMatchesByStatus(ctx context.Context, rdb *redis.Client, status string) (
 		if err != nil {
 			fmt.Println("Error unmarshaling data from Redis")
 		}
-		//fmt.Println(matchObj)
-		foundMatches = append(foundMatches, matchObj)
+
+		//@TODO:need to find the reason why sets by status in redis get messed up
+		if strings.EqualFold(matchObj.Status, status) { //this is a workaround to filter out the matches with the wrong statuses
+			foundMatches = append(foundMatches, matchObj)
+		}
 	}
 	sort.Sort(SortedByRound(foundMatches))
 	return foundMatches, err

@@ -20,6 +20,6 @@ func main() {
 
 	http.HandleFunc("/api/v1/swagger/", httpSwagger.WrapHandler)
 	// Start the HTTP server
-	log.Println("Server is running on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Server is running on port 8088...")
+	log.Fatal(http.ListenAndServe(":8088", nil))
 }
