@@ -124,3 +124,22 @@ func (a SortedByRound) Swap(i, j int) {
 func (a SortedByRound) Less(i, j int) bool {
 	return a[i].Round < a[j].Round
 }
+
+// Get match by ID from Redis
+func getMatchById(ctx context.Context, rdb *redis.Client, matchId string) (Match, error) {
+
+	var foundMatch Match
+	setKey := "match:" + matchId
+	fmt.Println("Requested: " + setKey)
+	matchData, err := rdb.HGet(context.Background(), setKey, "data").Result()
+	if err != nil {
+		fmt.Println("Can not fetch match with ID:" + matchId)
+	}
+
+	err = json.Unmarshal([]byte(matchData), &foundMatch)
+	if err != nil {
+		fmt.Println("Can not unmarshal match data")
+	}
+	fmt.Println(foundMatch)
+	return foundMatch, nil
+}

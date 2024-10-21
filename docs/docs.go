@@ -15,6 +15,50 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/match/{id}": {
+            "get": {
+                "description": "Get match details by given match ID",
+                "tags": [
+                    "match"
+                ],
+                "summary": "Retrieve match details by match ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Match ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Match"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/matches": {
             "get": {
                 "description": "Get matches filtered by their status (live, completed or scheduled) and sorted by round",
@@ -66,6 +110,12 @@ const docTemplate = `{
         "main.Match": {
             "type": "object",
             "properties": {
+                "awayPlayerScore": {
+                    "type": "integer"
+                },
+                "homePlayerScore": {
+                    "type": "integer"
+                },
                 "matchID": {
                     "type": "string"
                 },

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -16,6 +17,13 @@ func main() {
 	http.HandleFunc("/api/v1/matches", func(w http.ResponseWriter, r *http.Request) {
 		// Call the handler to get matches by status
 		getMatchesByStatusHandler(rdb, w, r)
+	})
+
+	// Define routes
+	http.HandleFunc("/api/v1/match/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("/match endpoint requested")
+		// Call the handler to get matches by status
+		getMatchByIdHandler(rdb, w, r)
 	})
 
 	http.HandleFunc("/api/v1/swagger/", httpSwagger.WrapHandler)
