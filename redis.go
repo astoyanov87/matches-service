@@ -12,14 +12,28 @@ import (
 )
 
 type Match struct {
-	MatchId         string `json:"matchID"`
+	MatchID         string `json:"matchID"`
 	Name            string `json:"name"`
 	Status          string `json:"status"`
 	Round           string `json:"round"`
+	HomePlayerID    string `json:"homePlayerId"`
 	HomePlayerScore int    `json:"homePlayerScore"`
+	HomePlayer      Player `json:"homePlayer"`
+	AwayPlayerID    string `json:"awayPlayerId"`
 	AwayPlayerScore int    `json:"awayPlayerScore"`
+	AwayPlayer      Player `json:"awayPlayer"`
 }
 
+type Player struct {
+	PlayerId  string `json:"playerID"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"surname"`
+	Media     Media  `json:"media"`
+}
+
+type Media struct {
+	Image string `json:"profile"`
+}
 type SortedByRound []Match
 
 // Initialize Redis connection
