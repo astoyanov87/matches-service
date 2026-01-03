@@ -28,7 +28,7 @@ func getMatchesByStatusHandler(rdb *redis.Client, w http.ResponseWriter, r *http
 
 	var returnMatches []Match
 	if status == "" {
-		fmt.Println("Reuested all matches")
+		fmt.Println("Requested all matches")
 		matches, err := getAllMatches(ctx, rdb)
 
 		if err != nil {

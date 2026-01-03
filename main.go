@@ -27,7 +27,16 @@ func main() {
 	})
 
 	http.HandleFunc("/api/v1/swagger/", httpSwagger.WrapHandler)
+
+	//health check endpoint
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
 	// Start the HTTP server
 	log.Println("Server is running on port 8088...")
 	log.Fatal(http.ListenAndServe(":8088", nil))
+
+
 }
