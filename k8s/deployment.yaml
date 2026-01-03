@@ -23,6 +23,7 @@ spec:
       containers:
       - name: matches-service
         image: astoyanov87/matches-service:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8088
           name: health
