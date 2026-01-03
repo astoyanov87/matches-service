@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/astoyanov87/matches-service/config"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -37,11 +38,11 @@ type Media struct {
 type SortedByRound []Match
 
 // Initialize Redis connection
-func initRedis() *redis.Client {
+func initRedis(cfg *config.Config) *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "10.133.66.119:6379", // Redis address
-		Password: "",                   // No password
-		DB:       0,                    // Default DB
+		Addr:     cfg.Redis.Host + ":" + cfg.Redis.Port, // Redis address
+		Password: cfg.Redis.Password,                    // No password
+		DB:       0,                                     // Default DB
 	})
 
 	// Ping Redis to test connection

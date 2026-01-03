@@ -5,13 +5,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/astoyanov87/matches-service/config"
 	_ "github.com/astoyanov87/matches-service/docs" // Update with the path to your generated docs folder
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func main() {
+
+	cfg := config.LoadConfig()
 	// Initialize Redis connection
-	rdb := initRedis()
+	rdb := initRedis(cfg)
 
 	// Define routes
 	http.HandleFunc("/api/v1/matches", func(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +40,5 @@ func main() {
 	// Start the HTTP server
 	log.Println("Server is running on port 8088...")
 	log.Fatal(http.ListenAndServe(":8088", nil))
-
 
 }
