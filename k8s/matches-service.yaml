@@ -5,7 +5,7 @@ metadata:
   namespace: snooker-livescore
 spec:
   selector:
-    app: matches
+    app: matches-service
   ports:
   - name: http
     port: 80
