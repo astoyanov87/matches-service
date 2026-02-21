@@ -20,9 +20,18 @@ type Match struct {
 	HomePlayerID    string `json:"homePlayerId"`
 	HomePlayerScore int    `json:"homePlayerScore"`
 	HomePlayer      Player `json:"homePlayer"`
+	HomePlayerImage string `json:"homePlayerImage"`
 	AwayPlayerID    string `json:"awayPlayerId"`
 	AwayPlayerScore int    `json:"awayPlayerScore"`
 	AwayPlayer      Player `json:"awayPlayer"`
+	AwayPlayerImage string `json:"awayPlayerImage"`
+	TournamentName  string `json:"tournamentName"`
+	MatchStartTime  string `json:"matchStartTime"`
+	MatchEndTime    string `json:"matchEndTime"`
+	StartDate       string `json:"startDate"`
+	StartTime       string `json:"startTime"`
+	EndDate         string `json:"endDate"`
+	EndTime         string `json:"endTime"`
 }
 
 type Player struct {
