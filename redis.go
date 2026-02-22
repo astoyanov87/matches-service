@@ -27,11 +27,13 @@ type Match struct {
 	AwayPlayerImage string `json:"awayPlayerImage"`
 	TournamentName  string `json:"tournamentName"`
 	MatchStartTime  string `json:"matchStartTime"`
-	MatchEndTime    string `json:"matchEndTime"`
-	StartDate       string `json:"startDate"`
-	StartTime       string `json:"startTime"`
-	EndDate         string `json:"endDate"`
-	EndTime         string `json:"endTime"`
+	// Raw startDateTime from the source (e.g. "2026-02-17 13:00:00")
+	StartDateTime string `json:"startDateTime"`
+	MatchEndTime  string `json:"matchEndTime"`
+	StartDate     string `json:"startDate"`
+	StartTime     string `json:"startTime"`
+	EndDate       string `json:"endDate"`
+	EndTime       string `json:"endTime"`
 }
 
 type Player struct {
@@ -180,7 +182,11 @@ func ensureMatchTimes(m *Match) {
 		return
 	}
 	if m.MatchStartTime == "" {
-		if m.StartDate != "" && m.StartTime != "" {
+		// Prefer explicit combined startDateTime if present
+		if m.StartDateTime != "" {
+			// Source format is typically "YYYY-MM-DD HH:MM:SS" — convert to ISO-like "YYYY-MM-DDTHH:MM:SS" for consistency
+			m.MatchStartTime = strings.Replace(m.StartDateTime, " ", "T", 1)
+		} else if m.StartDate != "" && m.StartTime != "" {
 			m.MatchStartTime = m.StartDate + "T" + m.StartTime
 		} else if m.StartDate != "" {
 			m.MatchStartTime = m.StartDate
