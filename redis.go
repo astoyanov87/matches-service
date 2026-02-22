@@ -90,6 +90,7 @@ func getMatchesByStatus(ctx context.Context, rdb *redis.Client, status string) (
 
 		//@TODO:need to find the reason why sets by status in redis get messed up
 		if strings.EqualFold(matchObj.Status, status) { //this is a workaround to filter out the matches with the wrong statuses
+			ensureMatchTimes(&matchObj)
 			foundMatches = append(foundMatches, matchObj)
 		}
 	}
@@ -127,6 +128,7 @@ func getAllMatches(ctx context.Context, rdb *redis.Client) ([]Match, error) {
 			fmt.Println("Error unmarshaling data from Redis")
 		}
 		//fmt.Println(matchObj)
+		ensureMatchTimes(&matchObj)
 		foundMatches = append(foundMatches, matchObj)
 	}
 	sort.Sort(SortedByRound(foundMatches))
@@ -164,6 +166,31 @@ func getMatchById(ctx context.Context, rdb *redis.Client, matchId string) (Match
 	if err != nil {
 		fmt.Println("Can not unmarshal match data")
 	}
+
+	// Ensure start/end times are populated if possible
+	ensureMatchTimes(&foundMatch)
 	fmt.Println(foundMatch)
 	return foundMatch, nil
+}
+
+// ensureMatchTimes populates MatchStartTime and MatchEndTime if they are empty
+// by combining available date and time fields.
+func ensureMatchTimes(m *Match) {
+	if m == nil {
+		return
+	}
+	if m.MatchStartTime == "" {
+		if m.StartDate != "" && m.StartTime != "" {
+			m.MatchStartTime = m.StartDate + "T" + m.StartTime
+		} else if m.StartDate != "" {
+			m.MatchStartTime = m.StartDate
+		}
+	}
+	if m.MatchEndTime == "" {
+		if m.EndDate != "" && m.EndTime != "" {
+			m.MatchEndTime = m.EndDate + "T" + m.EndTime
+		} else if m.EndDate != "" {
+			m.MatchEndTime = m.EndDate
+		}
+	}
 }
