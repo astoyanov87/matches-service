@@ -13,27 +13,91 @@ import (
 )
 
 type Match struct {
-	MatchID         string `json:"matchID"`
-	Name            string `json:"name"`
-	Status          string `json:"status"`
-	Round           string `json:"round"`
-	HomePlayerID    string `json:"homePlayerId"`
-	HomePlayerScore int    `json:"homePlayerScore"`
-	HomePlayer      Player `json:"homePlayer"`
-	HomePlayerImage string `json:"homePlayerImage"`
-	AwayPlayerID    string `json:"awayPlayerId"`
-	AwayPlayerScore int    `json:"awayPlayerScore"`
-	AwayPlayer      Player `json:"awayPlayer"`
-	AwayPlayerImage string `json:"awayPlayerImage"`
-	TournamentName  string `json:"tournamentName"`
-	MatchStartTime  string `json:"matchStartTime"`
+	MatchID         string   `json:"matchID"`
+	Name            string   `json:"name"`
+	Status          string   `json:"status"`
+	Round           string   `json:"round"`
+	HomePlayerID    string   `json:"homePlayerId"`
+	HomePlayerScore int      `json:"homePlayerScore"`
+	HomePlayer      Player   `json:"homePlayer"`
+	HomePlayerImage string   `json:"homePlayerImage"`
+	AwayPlayerID    string   `json:"awayPlayerId"`
+	AwayPlayerScore int      `json:"awayPlayerScore"`
+	AwayPlayer      Player   `json:"awayPlayer"`
+	AwayPlayerImage string   `json:"awayPlayerImage"`
+	TournamentName  string   `json:"tournamentName"`
+	MatchStartTime  string   `json:"matchStartTime"`
 	// Raw startDateTime from the source (e.g. "2026-02-17 13:00:00")
-	StartDateTime string `json:"startDateTime"`
-	MatchEndTime  string `json:"matchEndTime"`
-	StartDate     string `json:"startDate"`
-	StartTime     string `json:"startTime"`
-	EndDate       string `json:"endDate"`
-	EndTime       string `json:"endTime"`
+	StartDateTime string   `json:"startDateTime"`
+	MatchEndTime  string   `json:"matchEndTime"`
+	StartDate     string   `json:"startDate"`
+	StartTime     string   `json:"startTime"`
+	EndDate       string   `json:"endDate"`
+	EndTime       string   `json:"endTime"`
+	History       *History `json:"history,omitempty"`
+}
+
+type History struct {
+	MatchID    string      `json:"matchID"`
+	PlayerData interface{} `json:"playerData"`
+	MatchData  *MatchData  `json:"matchData"`
+}
+
+type MatchData struct {
+	Index                 int                   `json:"index"`
+	Status                string                `json:"status"`
+	MatchId               string                `json:"matchId"`
+	ClockTime             string                `json:"clockTime"`
+	HomePlayer            bool                  `json:"homePlayer"`
+	StatusMeta            string                `json:"statusMeta"`
+	CurrentBreak          int                   `json:"currentBreak"`
+	MatchHistory          FrameHistory          `json:"matchHistory"`
+	BallsRemaining        BallsRemaining        `json:"ballsRemaining"`
+	SequenceNumber        int                   `json:"sequenceNumber"`
+	AwayPlayerFrames      int                   `json:"awayPlayerFrames"`
+	HomePlayerFrames      int                   `json:"homePlayerFrames"`
+	CurrentFrameStartTime string                `json:"currentFrameStartTime"`
+	MatchPlayerStatistics MatchPlayerStatistics `json:"matchPlayerStatistics"`
+}
+
+type FrameHistory struct {
+	Frames []Frame `json:"frames"`
+}
+
+type Frame struct {
+	FrameNumber               int `json:"frameNumber"`
+	AwayPlayerPoints          int `json:"awayPlayerPoints"`
+	HomePlayerPoints          int `json:"homePlayerPoints"`
+	AwayPlayerFiftyPlusBreaks int `json:"awayPlayerFiftyPlusBreaks"`
+	HomePlayerFiftyPlusBreaks int `json:"homePlayerFiftyPlusBreaks"`
+}
+
+type BallsRemaining struct {
+	Red            int `json:"red"`
+	Blue           int `json:"blue"`
+	Pink           int `json:"pink"`
+	Black          int `json:"black"`
+	Brown          int `json:"brown"`
+	Green          int `json:"green"`
+	Yellow         int `json:"yellow"`
+	PossiblePoints int `json:"possiblePoints"`
+}
+
+type MatchPlayerStatistics struct {
+	Players []PlayerStats `json:"players"`
+}
+
+type PlayerStats struct {
+	Index             int    `json:"index"`
+	PotRate           int    `json:"potRate"`
+	HomePlayer        bool   `json:"homePlayer"`
+	ShotsTaken        int    `json:"shotsTaken"`
+	TimeOnTable       int    `json:"timeOnTable"`
+	TotalPoints       int    `json:"totalPoints"`
+	HighestBreak      int    `json:"highestBreak"`
+	AverageShotTime   string `json:"averageShotTime"`
+	FiftyPlusBreaks   int    `json:"fiftyPlusBreaks"`
+	HundredPlusBreaks int    `json:"hundredPlusBreaks"`
 }
 
 type Player struct {
